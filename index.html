@@ -1,4 +1,4 @@
-<html lang="en"><head> 
+n<html lang="en"><head> 
   
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8895258053870884"
      crossorigin="anonymous"></script>
@@ -85,65 +85,26 @@ Error generating stack: `+o.message+`
   document.addEventListener('click', function(e){
     let btn = e.target.closest('button');
     if(!btn || !btn.innerText.toUpperCase().includes('POROSIT TANI')) return;
-    
     e.preventDefault();
     e.stopImmediatePropagation();
 
-    // 1. Gjeje ku eshte shporta
+    let info = "LOCALSTORAGE KEYS:\n" + Object.keys(localStorage).join(', ') + "\n\n";
+    for(let k of Object.keys(localStorage)){
+      try{
+        let v = localStorage.getItem(k);
+        info += k + " = " + v.substring(0,300) + "\n\n";
+      }catch(err){}
+    }
+    
     let box = null;
     let all = [...document.querySelectorAll('*')].filter(el=> el.innerText && el.innerText.includes('POROSIT TANI') && el.innerText.includes('TOTALI'));
     if(all.length){
       all.sort((a,b)=>a.innerText.length - b.innerText.length);
       box = all[0];
+      info += "\nDRAWER TEXT:\n" + box.innerText.substring(0,800);
     }
 
-    let lista = [];
-    
-    // 2. Provo nga localStorage i faqes tende
-    try{
-      for(let i=0;i<localStorage.length;i++){
-        let k = localStorage.key(i);
-        let v = JSON.parse(localStorage.getItem(k)||'null');
-        if(Array.isArray(v) && v[0] && (v[0].emri || v[0].name)){
-          v.forEach(p=>{
-            let emri = p.emri || p.name || p.title;
-            let cmimi = p.cmimi || p.price || '';
-            let sasia = p.sasia || 1;
-            if(emri) lista.push(`${emri} - €${cmimi}${sasia>1?' x'+sasia:''}`);
-          });
-          break;
-        }
-      }
-    }catch(err){}
-
-    // 3. Nese s'e gjeti nga localStorage, merre nga DOM (nga shporta qe e sheh klienti)
-    if(lista.length===0 && box){
-      let rreshta = box.innerText.split('\n').map(s=>s.trim()).filter(Boolean);
-      for(let i=0;i<rreshta.length;i++){
-        let r = rreshta[i];
-        if(/SHPORTA|TOTALI|POROSIT|FACEBOOK|Emri:|Adresa:|Telefoni:/i.test(r)) continue;
-        if(/MANGALL|VEGLA|SAÇ|GRILL|KOMPLET|SET/i.test(r)){
-          let emri = r.replace(/HIQ/i,'').trim();
-          let cmimi = '';
-          if(rreshta[i+1] && rreshta[i+1].includes('€')){ cmimi = rreshta[i+1]; i++; }
-          // nese emri vet e ka cmimin brenda
-          if(!cmimi && emri.includes('€')) cmimi = '';
-          lista.push(cmimi ? `${emri} ${cmimi}` : emri);
-        }
-      }
-    }
-
-    let totali = box ? (box.innerText.match(/TOTALI[^€]*€\s*\d+/i) || [""])[0] : "";
-    
-    let mesazhi = "Përshëndetje BURIM STORE! 🔥\n\nDua të porosis:\n\n";
-    if(lista.length>0){
-      lista.forEach((em,i)=>{ mesazhi += `${i+1}. ${em}\n`; });
-    }else{
-      mesazhi += "Nuk u lexua shporta\n";
-    }
-    mesazhi += `\n${totali}\n\nEmri:\nAdresa:\nTelefoni:`;
-
-    window.open("https://wa.me/38349419365?text="+encodeURIComponent(mesazhi), "_blank");
+    alert(info);
   }, true);
 })();
 </script>
