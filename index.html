@@ -81,66 +81,69 @@ Error generating stack: `+o.message+`
   <script type="application/json" data-clippy-inline-media-manifest="1">{"version":1,"slots":[]}</script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
 <script>
-// FIX V2 - Merr emrat real nga shporta
 (function(){
-  function gjejArtikujt() {
-    // 1. Provo me gjet nga localStorage (ky e ka faqja jote)
-    let keys = Object.keys(localStorage);
-    for (let k of keys) {
-      try {
-        let v = JSON.parse(localStorage.getItem(k));
-        if (Array.isArray(v) && v.length > 0 && v[0].emri) {
-          return v; // e gjetem! 
-        }
-        if (Array.isArray(v) && v.length > 0 && v[0].name) {
-          return v;
-        }
-        // ndonjehere eshte {items: [...]}
-        if (v && v.items && Array.isArray(v.items)) {
-          return v.items;
-        }
-      } catch(e){}
-    }
-    return null;
-  }
-
   document.addEventListener('click', function(e){
     let btn = e.target.closest('button');
-    if(!btn) return;
-    if(!btn.innerText.toUpperCase().includes('POROSIT TANI')) return;
+    if(!btn || !btn.innerText.toUpperCase().includes('POROSIT TANI')) return;
     
     e.preventDefault();
     e.stopImmediatePropagation();
 
-    let artikuj = gjejArtikujt();
-    let lista = "";
-
-    if (artikuj && artikuj.length > 0) {
-      artikuj.forEach((p, i) => {
-        let emri = p.emri || p.name || p.title || "Produkt";
-        let cmimi = p.cmimi || p.price || p.cena || "";
-        let sasia = p.sasia || p.qty || 1;
-        lista += `${i+1}. ${emri} ${sasia>1 ? 'x'+sasia : ''} - €${cmimi}\n`;
-      });
-    } else {
-      // Fallback nese s'e gjen dot - merr nga faqja direkt
-      let t = document.body.innerText;
-      if(t.includes("KLASIK")) lista += "• MANGALL KLASIK 60CM - €149\n";
-      if(t.includes("PROFESIONAL")) lista += "• MANGALL PROFESIONAL 80CM - €249\n";
-      if(t.includes("VEGLA")) lista += "• SET VEGLA MANGALLI - €45\n";
-      if(t.includes("SAÇ")) lista += "• MANGALL ME SAÇ - €189\n";
-      if(t.includes("GRILL")) lista += "• GRILLË PREMIUM - €89\n";
-      if(t.includes("FAMILJAR")) lista += "• KOMPLET FAMILJAR - €299\n";
-      if(lista==="") lista = "• (Shporta boshe - klienti s'ka zgjedh produkt)\n";
+    // 1. Gjeje ku eshte shporta
+    let box = null;
+    let all = [...document.querySelectorAll('*')].filter(el=> el.innerText && el.innerText.includes('POROSIT TANI') && el.innerText.includes('TOTALI'));
+    if(all.length){
+      all.sort((a,b)=>a.innerText.length - b.innerText.length);
+      box = all[0];
     }
 
-    let totali = document.body.innerText.match(/TOTALI\s*€?\s*\d+/i);
-    totali = totali ? totali[0] : "TOTALI";
-
-    let mesazhi = `Përshëndetje BURIM STORE! 🔥\n\nDua të porosis:\n\n${lista}\n${totali}\n\nEmri:\nAdresa:\nTelefoni:`;
+    let lista = [];
     
-    let url = "https://wa.me/38349419365?text=" + encodeURIComponent(mesazhi);
-    window.open(url, "_blank");
+    // 2. Provo nga localStorage i faqes tende
+    try{
+      for(let i=0;i<localStorage.length;i++){
+        let k = localStorage.key(i);
+        let v = JSON.parse(localStorage.getItem(k)||'null');
+        if(Array.isArray(v) && v[0] && (v[0].emri || v[0].name)){
+          v.forEach(p=>{
+            let emri = p.emri || p.name || p.title;
+            let cmimi = p.cmimi || p.price || '';
+            let sasia = p.sasia || 1;
+            if(emri) lista.push(`${emri} - €${cmimi}${sasia>1?' x'+sasia:''}`);
+          });
+          break;
+        }
+      }
+    }catch(err){}
+
+    // 3. Nese s'e gjeti nga localStorage, merre nga DOM (nga shporta qe e sheh klienti)
+    if(lista.length===0 && box){
+      let rreshta = box.innerText.split('\n').map(s=>s.trim()).filter(Boolean);
+      for(let i=0;i<rreshta.length;i++){
+        let r = rreshta[i];
+        if(/SHPORTA|TOTALI|POROSIT|FACEBOOK|Emri:|Adresa:|Telefoni:/i.test(r)) continue;
+        if(/MANGALL|VEGLA|SAÇ|GRILL|KOMPLET|SET/i.test(r)){
+          let emri = r.replace(/HIQ/i,'').trim();
+          let cmimi = '';
+          if(rreshta[i+1] && rreshta[i+1].includes('€')){ cmimi = rreshta[i+1]; i++; }
+          // nese emri vet e ka cmimin brenda
+          if(!cmimi && emri.includes('€')) cmimi = '';
+          lista.push(cmimi ? `${emri} ${cmimi}` : emri);
+        }
+      }
+    }
+
+    let totali = box ? (box.innerText.match(/TOTALI[^€]*€\s*\d+/i) || [""])[0] : "";
+    
+    let mesazhi = "Përshëndetje BURIM STORE! 🔥\n\nDua të porosis:\n\n";
+    if(lista.length>0){
+      lista.forEach((em,i)=>{ mesazhi += `${i+1}. ${em}\n`; });
+    }else{
+      mesazhi += "Nuk u lexua shporta\n";
+    }
+    mesazhi += `\n${totali}\n\nEmri:\nAdresa:\nTelefoni:`;
+
+    window.open("https://wa.me/38349419365?text="+encodeURIComponent(mesazhi), "_blank");
   }, true);
 })();
 </script>
