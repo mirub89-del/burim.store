@@ -86,13 +86,7 @@ Error generating stack: `+o.message+`
   function merrPorosine(){
     let txt = document.body.innerText;
     let porosia = [];
-    if(txt.includes("KLASIK 60CM")) porosia.push("1. MANGALL KLASIK 60CM - €149");
-    if(txt.includes("PROFESIONAL 80CM")) porosia.push("2. MANGALL PROFESIONAL 80CM - €249");
-    if(txt.includes("VEGLA MANGALLI")) porosia.push("3. SET VEGLA MANGALLI - €45");
-    if(txt.includes("ME SAÇ")) porosia.push("4. MANGALL ME SAÇ Ø60 - €189");
-    if(txt.includes("GRILLË PREMIUM")) porosia.push("5. GRILLË MANGALLI PREMIUM - €89");
-    if(txt.includes("FAMILJAR")) porosia.push("6. KOMPLET FAMILJAR - €299");
-    if(porosia.length===0) porosia.push("Shporta: shiko foton");
+  if(porosia.length===0) porosia.push("Shporta: shiko foton");
 
     let totali = (txt.match(/TOTALI[\s:]*€?\s*\d+/i) || ["TOTALI: €443"])[0];
     return porosia.join("\n") + "\n\n" + totali;
